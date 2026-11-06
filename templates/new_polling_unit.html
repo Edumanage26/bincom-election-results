@@ -1,0 +1,18 @@
+{% extends "base.html" %}{% block title %}Register Polling Unit | Bincom{% endblock %}
+{% block content %}
+<div class="mb-4"><div class="eyebrow">Question 03 · Data capture</div><h1 class="page-heading h2">Register a new polling unit</h1><p class="text-secondary mb-0">Choose the location and enter a score for every party.</p></div>
+<div class="panel p-4"><form method="post" id="newUnitForm">
+<div class="eyebrow mb-3">Polling unit information</div><div class="row g-3">
+<div class="col-md-6"><label class="form-label fw-semibold">Local Government Area</label><select class="form-select" name="lga_id" id="lgaSelect" required><option value="">Select LGA</option>{% for l in lgas %}<option value="{{ l.uniqueid }}" {% if selected_lga==l.uniqueid %}selected{% endif %}>{{ l.lga_name }}</option>{% endfor %}</select></div>
+<div class="col-md-6"><label class="form-label fw-semibold">Ward</label><select class="form-select" name="ward_id" id="wardSelect" required><option value="">Select ward</option>{% for w in wards %}<option value="{{ w.uniqueid }}" {% if request.form.get("ward_id", type=int)==w.uniqueid %}selected{% endif %}>{{ w.ward_name }}</option>{% endfor %}</select></div>
+<div class="col-md-4"><label class="form-label fw-semibold">Polling unit ID</label><input class="form-control" type="number" name="polling_unit_id" min="1" required value="{{ request.form.get('polling_unit_id', '') }}"></div>
+<div class="col-md-4"><label class="form-label fw-semibold">Polling unit number</label><input class="form-control" name="polling_unit_number" maxlength="50" value="{{ request.form.get('polling_unit_number', '') }}"></div>
+<div class="col-md-4"><label class="form-label fw-semibold">Polling unit name</label><input class="form-control" name="polling_unit_name" maxlength="50" required value="{{ request.form.get('polling_unit_name', '') }}"></div>
+</div><hr class="my-4"><div class="d-flex justify-content-between align-items-center flex-wrap gap-2"><div><div class="eyebrow">Party results</div><h2 class="h5 fw-bold mb-0">Enter votes by party</h2></div><span class="badge gold-tag">{{ parties|length }} parties</span></div>
+<div class="row g-3 mt-1">{% for p in parties %}<div class="col-sm-6 col-lg-4"><label class="form-label fw-semibold">{{ p.partyid }} <span class="text-secondary fw-normal">· {{ p.partyname }}</span></label><input class="form-control" type="number" min="0" step="1" name="score_{{ p.partyid }}" value="{{ request.form.get('score_' ~ p.partyid, '0') }}" required></div>{% endfor %}</div>
+<div class="d-flex justify-content-end gap-2 mt-4"><button type="reset" class="btn btn-outline-secondary">Clear form</button><button class="btn btn-inec px-4">Save polling unit and results</button></div>
+</form></div>
+{% endblock %}
+{% block scripts %}<script>
+document.getElementById('lgaSelect').addEventListener('change',function(){const id=this.value;const url=new URL(window.location.href);url.searchParams.set('lga_id',id);window.location.href=url.toString();});
+</script>{% endblock %}

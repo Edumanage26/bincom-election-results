@@ -1,0 +1,19 @@
+{% extends "base.html" %}{% block title %}Dashboard | Bincom{% endblock %}
+{% block content %}
+<div class="d-flex justify-content-between align-items-start flex-wrap gap-3 mb-4">
+ <div><div class="eyebrow">Election intelligence workspace</div><h1 class="page-heading h2 mb-1">Dashboard overview</h1><div class="text-secondary">A consolidated view of the supplied Delta State election dataset.</div></div>
+ <button class="btn btn-outline-inec no-print" onclick="window.print()">Print dashboard</button>
+</div>
+<div class="accent-line mb-4"></div>
+<div class="row g-3 mb-4">
+ {% for label,value,icon in [('Local Government Areas',stats.lgas if stats else '—','⌂'),('Polling units',stats.polling_units if stats else '—','⌖'),('Result records',stats.result_rows if stats else '—','▤')] %}
+ <div class="col-md-4"><div class="stat-card"><div class="stat-icon">{{ icon }}</div><div class="stat-value">{{ value }}</div><div class="stat-label">{{ label }}</div></div></div>
+ {% endfor %}
+</div>
+<div class="row g-3">
+ <div class="col-xl-4"><div class="panel p-4 h-100"><div class="eyebrow mb-2">Question 01</div><h2 class="h5 fw-bold">Polling unit results</h2><p class="text-secondary small">Search the supplied records and inspect party scores for an individual polling unit.</p><a class="btn btn-inec w-100" href="{{ url_for('polling_unit_results') }}">Open polling unit results</a></div></div>
+ <div class="col-xl-4"><div class="panel p-4 h-100"><div class="eyebrow mb-2">Question 02</div><h2 class="h5 fw-bold">LGA result analysis</h2><p class="text-secondary small">Aggregate announced polling-unit results by party for a selected local government.</p><a class="btn btn-inec w-100" href="{{ url_for('lga_results') }}">Analyse an LGA</a></div></div>
+ <div class="col-xl-4"><div class="panel p-4 h-100"><div class="eyebrow mb-2">Question 03</div><h2 class="h5 fw-bold">New polling unit</h2><p class="text-secondary small">Register a polling unit and capture results for every party in the party table.</p><a class="btn btn-inec w-100" href="{{ url_for('new_polling_unit') }}">Enter new polling unit</a></div></div>
+</div>
+<div class="panel p-4 mt-4"><div class="d-flex align-items-center justify-content-between flex-wrap gap-2"><div><h2 class="h6 fw-bold mb-1">Data integrity note</h2><p class="text-secondary small mb-0">LGA totals are calculated from polling-unit result rows. Announced LGA totals are not used for Question 2.</p></div><span class="badge gold-tag">Source database preserved</span></div></div>
+{% endblock %}
